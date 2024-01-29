@@ -1,9 +1,8 @@
-package com.example.application.views.helloworld;
+package com.example.application.views.view;
 
 import com.example.application.views.MainLayout;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -14,13 +13,13 @@ import com.vaadin.flow.router.RouteAlias;
 @PageTitle("Reproductor")
 @Route(value = "hello", layout = MainLayout.class)
 @RouteAlias(value = "", layout = MainLayout.class)
-public class reproductor extends HorizontalLayout {
+public class MainView extends HorizontalLayout {
 
     private TextField name;
     private Button sayHello;
 
 
-    public reproductor() {
+    public MainView() {
 
         name = new TextField("Your name");
         sayHello = new Button("Say hello");
