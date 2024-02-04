@@ -3,9 +3,6 @@ package com.example.application.views.service;
 import com.example.application.views.objeto.nodo;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.notification.Notification;
-
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
