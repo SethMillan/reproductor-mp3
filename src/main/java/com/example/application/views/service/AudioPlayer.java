@@ -1,6 +1,7 @@
 package com.example.application.views.service;
 
-import com.example.application.views.objeto.nodo;
+import com.example.application.views.objeto.Dto.nodoDto;
+import com.example.application.views.objeto.Entity.nodo;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.notification.Notification;
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.List;
 
 public class AudioPlayer implements IAudioPlayer{
     private nodo inicioLista, finLista;
+    private List<nodoDto> nodoDtos=new ArrayList<>();
     private int tamanio;
     //-----Constructor-----------------------
     public AudioPlayer(){
@@ -25,17 +27,9 @@ public class AudioPlayer implements IAudioPlayer{
         }
     }
     @Override
-    public void mostrarCanciones(Grid<nodo> grid){
-
-        List<nodo> canciones=new ArrayList<>();
+    public void mostrarCanciones(Grid<nodoDto> grid){
         try{
-            nodo nodoActual = inicioLista;
-
-            while (nodoActual != null) {
-                canciones.add(nodoActual);
-                nodoActual = nodoActual.getSiguiente();
-            }
-            grid.setItems(canciones);
+            grid.setItems(nodoDtos);
         }
         catch(Exception e){
             Notification.show("Errorcito: "+e);
@@ -49,7 +43,6 @@ public class AudioPlayer implements IAudioPlayer{
             inicioLista.setSiguiente(inicioLista);
             N.setAnterior(finLista);
             finLista=N;
-
         }else{
             finLista.setSiguiente(N);
             N.setSiguiente(inicioLista);
@@ -57,6 +50,8 @@ public class AudioPlayer implements IAudioPlayer{
             finLista=N;
             inicioLista.setAnterior(finLista);
         }
+        nodoDto nodoDto=new nodoDto(nom,dir);
+        nodoDtos.add(nodoDto);
         tamanio++;
     }
 

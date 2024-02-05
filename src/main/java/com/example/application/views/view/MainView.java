@@ -1,36 +1,26 @@
 package com.example.application.views.view;
 
 import com.example.application.views.MainLayout;
-import com.example.application.views.objeto.nodo;
+import com.example.application.views.objeto.Dto.nodoDto;
+import com.example.application.views.objeto.Entity.nodo;
 import com.example.application.views.service.AudioPlayer;
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
-import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.progressbar.ProgressBar;
-import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
-import javazoom.jl.decoder.Bitstream;
-import javazoom.jl.decoder.BitstreamException;
 import javazoom.jl.decoder.JavaLayerException;
-import javazoom.jl.player.Player;
 import javazoom.jl.player.advanced.AdvancedPlayer;
 
-import javax.sound.sampled.*;
-import javax.swing.plaf.SliderUI;
-import java.awt.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 
 @PageTitle("Reproductor")
 @Route(value = "hello", layout = MainLayout.class)
@@ -71,7 +61,7 @@ public class MainView extends HorizontalLayout {
 
 
         //GRID
-        Grid<nodo> grid=new Grid<>(nodo.class);
+        Grid<nodoDto> grid=new Grid<>(nodoDto.class);
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
         grid.setWidth("80%");
         grid.setMaxHeight("60%");
@@ -108,8 +98,11 @@ public class MainView extends HorizontalLayout {
         }
 
         //LOGICA DE LAS CANCIONES
+        insertCanciones(grid);
+        //audioPlayer.mostrarCanciones(grid);
 
-         audioPlayer=new AudioPlayer();
+
+
         //play.setIcon(new Icon(VaadinIcon.STOP));
         //PROGRAMACION DE LA DERECHA
         derecha.add(grid);
@@ -126,7 +119,7 @@ public class MainView extends HorizontalLayout {
 
         add(izquierda,derecha);
     }
-    public static void insertCanciones(){
+    public static void insertCanciones(Grid<nodoDto>grid){
         audioPlayer=new AudioPlayer();
         String filePath="C:\\Users\\milla\\OneDrive - Unidad de Educación Media Superior Tecnológica Industrial y de Servicios\\DevilMan Projects\\Aprendizaje VAADIN\\reproductor\\src\\main\\java\\com\\example\\application\\views\\musica\\No Me Toquen Ese Vals, Julio Jaramillo.mp3";
         audioPlayer.insertar("No me toquen ese vals - Julio Jaramillo",filePath);
@@ -134,6 +127,11 @@ public class MainView extends HorizontalLayout {
         audioPlayer.insertar("Pose - Daddy Yankee",filePath2);
         String filePath3="C:\\Users\\milla\\OneDrive - Unidad de Educación Media Superior Tecnológica Industrial y de Servicios\\DevilMan Projects\\Aprendizaje VAADIN\\reproductor\\src\\main\\java\\com\\example\\application\\views\\musica\\Molotov - Frijolero.mp3.crdownload";
         audioPlayer.insertar("Frijolero - Molotov",filePath3);
+        Notification.show(audioPlayer.getCancion(0).getNombre());
+        Notification.show(audioPlayer.getCancion(0).getSiguiente().getNombre());
+        Notification.show(audioPlayer.getCancion(0).getSiguiente().getSiguiente().getNombre());
+        Notification.show(audioPlayer.getCancion(0).getSiguiente().getSiguiente().getSiguiente().getNombre());
+        audioPlayer.mostrarCanciones(grid);
     }
 
 }
