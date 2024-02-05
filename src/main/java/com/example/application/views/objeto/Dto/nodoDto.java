@@ -12,5 +12,5 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class nodoDto implements Serializable {
-    private String nombre, direccion;
+    private String cancion;
 }

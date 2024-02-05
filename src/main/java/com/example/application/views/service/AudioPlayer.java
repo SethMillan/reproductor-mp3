@@ -50,7 +50,7 @@ public class AudioPlayer implements IAudioPlayer{
             finLista=N;
             inicioLista.setAnterior(finLista);
         }
-        nodoDto nodoDto=new nodoDto(nom,dir);
+        nodoDto nodoDto=new nodoDto(nom);
         nodoDtos.add(nodoDto);
         tamanio++;
     }
