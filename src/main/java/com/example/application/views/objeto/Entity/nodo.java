@@ -1,4 +1,4 @@
-package com.example.application.views.objeto;
+package com.example.application.views.objeto.Entity;
 
 import lombok.*;
 @Data
