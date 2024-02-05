@@ -4,9 +4,12 @@ import com.example.application.views.objeto.Dto.nodoDto;
 import com.example.application.views.objeto.Entity.nodo;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.notification.Notification;
+import lombok.Data;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
 public class AudioPlayer implements IAudioPlayer{
     private nodo inicioLista, finLista;
     private List<nodoDto> nodoDtos=new ArrayList<>();
