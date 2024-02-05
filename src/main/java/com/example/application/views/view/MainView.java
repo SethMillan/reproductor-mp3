@@ -19,24 +19,30 @@ import com.vaadin.flow.router.RouteAlias;
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.advanced.AdvancedPlayer;
 
+import javax.sound.sampled.*;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 @PageTitle("Reproductor")
 @Route(value = "hello", layout = MainLayout.class)
 @RouteAlias(value = "", layout = MainLayout.class)
 public class MainView extends HorizontalLayout {
 
-    private Button playBtn,nextBtn,lastBtn;
-    private Icon play=new Icon(VaadinIcon.PLAY),next=new Icon(VaadinIcon.STEP_FORWARD),last=new Icon(VaadinIcon.STEP_BACKWARD);
+
+    private static Button playBtn,nextBtn,lastBtn;
+    private static Icon play=new Icon(VaadinIcon.PLAY),next=new Icon(VaadinIcon.STEP_FORWARD),last=new Icon(VaadinIcon.STEP_BACKWARD), stop=new Icon(VaadinIcon.STOP);
     private HorizontalLayout izquierda,iconos;
     private VerticalLayout derecha, vertical;
     //private Image img;
     private H2 cancion;
     private H1 titulo;
-    private AdvancedPlayer player;
-    private String imgPath="https://imgs.search.brave.com/Lse0LmllKvkNW2d8eaPChvn0l1Z6XaL1og5BVojdQ6A/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9zeW1i/bC13b3JsZC5ha2Ft/YWl6ZWQubmV0L2kv/d2VicC80NS9kYWVl/NWZiNTM4NGY3NGNk/Njk2Y2VmOWZmNWQ5/MTMud2VicA";
+    private static boolean estadoBtn=false;
     private static AudioPlayer audioPlayer;
+    private static Clip clip;
+
+
     public MainView() {
         titulo=new H1("Canción");
         addClassName("fondo");
@@ -82,28 +88,32 @@ public class MainView extends HorizontalLayout {
         play.getStyle().set("font-size", "35px");
         next.getStyle().set("font-size", "35px");
         last.getStyle().set("font-size", "35px");
+        stop.getStyle().set("font-size", "35px");
         playBtn =new Button("",play);
         nextBtn =new Button("", next);
         lastBtn =new Button("", last);
         iconos.add(lastBtn, playBtn, nextBtn);
 
-        String filePath="C:\\Users\\milla\\OneDrive - Unidad de Educación Media Superior Tecnológica Industrial y de Servicios\\DevilMan Projects\\Aprendizaje VAADIN\\reproductor\\src\\main\\java\\com\\example\\application\\views\\musica\\No Me Toquen Ese Vals, Julio Jaramillo.mp3";
-        try {
-            AdvancedPlayer audioInputStream=new AdvancedPlayer(new FileInputStream(filePath));
-        } catch (FileNotFoundException e) {
-            Notification.show(e.toString());
-
-        } catch (JavaLayerException e) {
-            throw new RuntimeException(e);
-        }
-
         //LOGICA DE LAS CANCIONES
         insertCanciones(grid);
-        //audioPlayer.mostrarCanciones(grid);
 
 
 
-        //play.setIcon(new Icon(VaadinIcon.STOP));
+        playBtn.addClickListener(e->{
+            Notification.show((String.valueOf(estadoBtn)));
+            if(!estadoBtn){
+                estadoBtn=true;
+                playBtn.setIcon(stop);
+                reproducirCancion();
+            }else{
+                estadoBtn=false;
+                playBtn.setIcon(play);
+                detenerCancion();
+            }
+
+        });
+
+
         //PROGRAMACION DE LA DERECHA
         derecha.add(grid);
         derecha.setSizeFull();
@@ -121,17 +131,34 @@ public class MainView extends HorizontalLayout {
     }
     public static void insertCanciones(Grid<nodoDto>grid){
         audioPlayer=new AudioPlayer();
-        String filePath="C:\\Users\\milla\\OneDrive - Unidad de Educación Media Superior Tecnológica Industrial y de Servicios\\DevilMan Projects\\Aprendizaje VAADIN\\reproductor\\src\\main\\java\\com\\example\\application\\views\\musica\\No Me Toquen Ese Vals, Julio Jaramillo.mp3";
-        audioPlayer.insertar("No me toquen ese vals - Julio Jaramillo",filePath);
-        String filePath2="C:\\Users\\milla\\OneDrive - Unidad de Educación Media Superior Tecnológica Industrial y de Servicios\\DevilMan Projects\\Aprendizaje VAADIN\\reproductor\\src\\main\\java\\com\\example\\application\\views\\musica\\Daddy Yankee- Pose Sub.Español.mp3";
-        audioPlayer.insertar("Pose - Daddy Yankee",filePath2);
-        String filePath3="C:\\Users\\milla\\OneDrive - Unidad de Educación Media Superior Tecnológica Industrial y de Servicios\\DevilMan Projects\\Aprendizaje VAADIN\\reproductor\\src\\main\\java\\com\\example\\application\\views\\musica\\Molotov - Frijolero.mp3.crdownload";
-        audioPlayer.insertar("Frijolero - Molotov",filePath3);
+        String filePath="C:\\Users\\milla\\OneDrive - Unidad de Educación Media Superior Tecnológica Industrial y de Servicios\\DevilMan Projects\\Aprendizaje VAADIN\\reproductor\\src\\main\\java\\com\\example\\application\\views\\musica\\Daddy-Yankee-Pose-Sub.Español.wav";
+        audioPlayer.insertar("Pose - Daddy Yankee",filePath);
+        String filePath2="C:\\Users\\milla\\OneDrive - Unidad de Educación Media Superior Tecnológica Industrial y de Servicios\\DevilMan Projects\\Aprendizaje VAADIN\\reproductor\\src\\main\\java\\com\\example\\application\\views\\musica\\Molotov-Frijolero.wav";
+        audioPlayer.insertar("Frijolero - Molotov",filePath2);
+        String filePath3="C:\\Users\\milla\\OneDrive - Unidad de Educación Media Superior Tecnológica Industrial y de Servicios\\DevilMan Projects\\Aprendizaje VAADIN\\reproductor\\src\\main\\java\\com\\example\\application\\views\\musica\\No-Me-Toquen-Ese-Vals_-Julio-Jaramillo.wav";
+        audioPlayer.insertar("No me toquen ese vals - Julio Jaramillo",filePath3);
         Notification.show(audioPlayer.getCancion(0).getNombre());
         Notification.show(audioPlayer.getCancion(0).getSiguiente().getNombre());
         Notification.show(audioPlayer.getCancion(0).getSiguiente().getSiguiente().getNombre());
         Notification.show(audioPlayer.getCancion(0).getSiguiente().getSiguiente().getSiguiente().getNombre());
         audioPlayer.mostrarCanciones(grid);
+    }
+    public static void reproducirCancion(){
+        File archivo=new File(audioPlayer.getCancion(0).getDireccion());
+        try {
+            File file = new File("C:\\Users\\milla\\OneDrive - Unidad de Educación Media Superior Tecnológica Industrial y de Servicios\\DevilMan Projects\\Aprendizaje VAADIN\\reproductor\\src\\main\\java\\com\\example\\application\\views\\musica\\No-Me-Toquen-Ese-Vals_-Julio-Jaramillo.wav");  // Reemplaza con la ruta correcta
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
+            clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+          e.printStackTrace();  // Puedes personalizar esto según tus necesidades
+        }
+    }
+    public static void detenerCancion(){
+        clip.stop();
+        //clip.close();
+        Notification.show("Deberia detenerse");
     }
 
 }
