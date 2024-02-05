@@ -1,1 +1,28 @@
 @import url('./main-layout.css');
+.vertical{
+    background-color: #020202;
+    border-radius: 16px;
+}
+.imagen{
+    margin: 10px; /* Ajustar el margen según sea necesario */
+    border: none; /* Quitar el borde */
+
+}
+.iconos{
+    margin: 20px; /* Ajustar el margen según sea necesario */
+    margin-top: 30px;
+    background-color: #ffffff;
+    border-radius: 32px;
+}
+.fondo{
+}
+h1,h2{
+    /*font-family: "Courier New";*/
+    position: relative;
+    text-align: center;
+    width: 100%;
+    color: white;
+}
+derecha{
+    align-items: center;
+}
