@@ -20,6 +20,8 @@ import com.vaadin.flow.router.RouteAlias;
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @PageTitle("Reproductor")
 @Route(value = "hello", layout = MainLayout.class)
@@ -38,6 +40,7 @@ public class MainView extends HorizontalLayout {
     private static AudioPlayer audioPlayer;
     private static nodo nodoActual;//=new File("C:\\Users\\milla\\OneDrive - Unidad de Educación Media Superior Tecnológica Industrial y de Servicios\\DevilMan Projects\\Aprendizaje VAADIN\\reproductor\\src\\main\\java\\com\\example\\application\\views\\musica\\Daddy-Yankee-Pose-Sub.Español.wav");
     private static Clip clip;
+    private static Grid<nodoDto> grid;
 
 
     public MainView() {
@@ -60,7 +63,7 @@ public class MainView extends HorizontalLayout {
         iconos.setSizeFull();
         iconos.setJustifyContentMode(JustifyContentMode.CENTER);
         iconos.setAlignItems(Alignment.CENTER);
-        Grid<nodoDto> grid=new Grid<>(nodoDto.class);
+        grid=new Grid<>(nodoDto.class);
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
         grid.setWidth("80%");
         grid.setMaxHeight("60%");
@@ -106,7 +109,7 @@ public class MainView extends HorizontalLayout {
 
         });
         nextBtn.addClickListener(e->{
-            if(clip.isRunning()){
+            if(clip!=null&&clip.isRunning()){
                 clip.stop();
                 nodoActual = nodoActual.getSiguiente();
                 reproducirCancion(new File(nodoActual.getDireccion()));
@@ -114,9 +117,11 @@ public class MainView extends HorizontalLayout {
                 nodoActual = nodoActual.getSiguiente();
             }
             cancion.setText(nodoActual.getNombre());
+            seleccionarGrid();
         });
         lastBtn.addClickListener(e->{
-            if(clip.isRunning()){
+
+            if(clip!=null && clip.isRunning()){
                 clip.stop();
                 nodoActual = nodoActual.getAnterior();
                 reproducirCancion(new File(nodoActual.getDireccion()));
@@ -124,6 +129,7 @@ public class MainView extends HorizontalLayout {
                 nodoActual = nodoActual.getAnterior();
             }
             cancion.setText(nodoActual.getNombre());
+            seleccionarGrid();
         });
 
         grid.addItemClickListener(e->{
@@ -175,6 +181,7 @@ public class MainView extends HorizontalLayout {
         audioPlayer.insertar("No me toquen ese vals - Julio Jaramillo",filePath3);
         audioPlayer.mostrarCanciones(grid);
         nodoActual =audioPlayer.getCancion(0);
+        seleccionarGrid();
     }
     public static void reproducirCancion(File file){
         try {
@@ -192,6 +199,16 @@ public class MainView extends HorizontalLayout {
         clip.stop();
         estadoBtn=false;
         playBtn.setIcon(play);
+    }
+    public static void seleccionarGrid(){
+        List<nodoDto> nodoDtoList=new ArrayList<>();
+        nodoDtoList=audioPlayer.getNodoDtos();
+        for (int i = 0; i < nodoDtoList.size(); i++) {
+            nodoDto varDto=nodoDtoList.get(i);
+            if(varDto.getCancion().equals(nodoActual.getNombre())){
+                grid.select(varDto);
+            }
+        }
     }
 
 }
