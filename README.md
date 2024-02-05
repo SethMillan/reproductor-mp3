@@ -1,45 +1,25 @@
-# reproductor
+# Reproductor MP3
 
-This project can be used as a starting point to create your own Vaadin application with Spring Boot.
-It contains all the necessary configuration and some placeholder files to get you started.
+## Introduccion
 
-## Running the application
+Esta practica es una tarea para la materia de Tópicos Avanzados de Programación con el profesor Amaro Flores Alejandro, consiste en realizar un reproductor de musica mp3 con una interfaz visual, por lo que se decidió que para fines practicos se haría uso de Vaadin.
 
-The project is a standard Maven project. To run it from the command line,
-type `mvnw` (Windows), or `./mvnw` (Mac & Linux), then open
-http://localhost:8080 in your browser.
+## Base URL
 
-You can also import the project to your IDE of choice as you would with any
-Maven project. Read more on [how to import Vaadin projects to different IDEs](https://vaadin.com/docs/latest/guide/step-by-step/importing) (Eclipse, IntelliJ IDEA, NetBeans, and VS Code).
+La url sobre la que se estará trabajando es la siguiente `https://localhost:8080`
 
-## Deploying to Production
+## Recursos disponibles
 
-To create a production build, call `mvnw clean package -Pproduction` (Windows),
-or `./mvnw clean package -Pproduction` (Mac & Linux).
-This will build a JAR file with all the dependencies and front-end resources,
-ready to be deployed. The file can be found in the `target` folder after the build completes.
+La interfaz visual cuenta con dos partes:
+ - Izquierda: Con el div y los controles principales de las canciones
+ - Derecha: Con la tabla(grid) que contendra la lista de canciones
 
-Once the JAR file is built, you can run it using
-`java -jar target/reproductor-app-1.0-SNAPSHOT.jar`
+Una vez que se termino el programa se opto por decidir que el grid tambien pudiera intervenir con la seleccion de canciones, por lo que si se decide seleccionar algun item del mismo, reproducira la cancion correspondiente.
 
-## Project structure
+## Detalles
 
-- `MainLayout.java` in `src/main/java` contains the navigation setup (i.e., the
-  side/top bar and the main menu). This setup uses
-  [App Layout](https://vaadin.com/docs/components/app-layout).
-- `views` package in `src/main/java` contains the server-side Java views of your application.
-- `views` folder in `frontend/` contains the client-side JavaScript views of your application.
-- `themes` folder in `frontend/` contains the custom CSS styles.
-
-## Useful links
-
-- Read the documentation at [vaadin.com/docs](https://vaadin.com/docs).
-- Follow the tutorial at [vaadin.com/docs/latest/tutorial/overview](https://vaadin.com/docs/latest/tutorial/overview).
-- Create new projects at [start.vaadin.com](https://start.vaadin.com/).
-- Search UI components and their usage examples at [vaadin.com/docs/latest/components](https://vaadin.com/docs/latest/components).
-- View use case applications that demonstrate Vaadin capabilities at [vaadin.com/examples-and-demos](https://vaadin.com/examples-and-demos).
-- Build any UI without custom CSS by discovering Vaadin's set of [CSS utility classes](https://vaadin.com/docs/styling/lumo/utility-classes). 
-- Find a collection of solutions to common use cases at [cookbook.vaadin.com](https://cookbook.vaadin.com/).
-- Find add-ons at [vaadin.com/directory](https://vaadin.com/directory).
-- Ask questions on [Stack Overflow](https://stackoverflow.com/questions/tagged/vaadin) or join our [Discord channel](https://discord.gg/MYFq5RTbBn).
-- Report issues, create pull requests in [GitHub](https://github.com/vaadin).
+Algunos detalles que me gustarian recalcar que no parecen tan obvios cuando estas viendo la pura interfas visual son:
+ - Se creo la clase `nodoDto` para poder llenar la tabla del grid, de haberla llenado con la pura entidad del nodo habria tenido mas informacion de la necesaria y con ella un par de complicaciones que no convienen.
+ - Se trabajo con la libreria `Clip` y con `AudioInputStream`, recomiendo revisar el metodo `reproducirCancion(File)` en el `MainView`
+ - Al principio se estuvo manejando la libreria `AdvancedPlayer`, sin embargo esta libreria traia complicaciones, como el hecho de que al momento de reproducir una cancion, todas las demas funcoiones se detenian hasta que la cancion se detuviera, lo que posteriormente me llevo a trabajar con `Thread`, sin embargo el inconveniente con esto es que si reproducia la cancion y la detenia, pero no volvia a reproducirla, opte por buscar otra libreria.
+ - Tenia pensado tambien agregar un controlador de volumen, pero la libreria del `Slider` no parecia estar disponible, si llegara a encontrar otra version, lo actualizare 
