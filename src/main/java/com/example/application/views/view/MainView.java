@@ -46,7 +46,7 @@ public class MainView extends HorizontalLayout {
     private H1 titulo;
     private AdvancedPlayer player;
     private String imgPath="https://imgs.search.brave.com/Lse0LmllKvkNW2d8eaPChvn0l1Z6XaL1og5BVojdQ6A/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9zeW1i/bC13b3JsZC5ha2Ft/YWl6ZWQubmV0L2kv/d2VicC80NS9kYWVl/NWZiNTM4NGY3NGNk/Njk2Y2VmOWZmNWQ5/MTMud2VicA";
-
+    private static AudioPlayer audioPlayer;
     public MainView() {
         titulo=new H1("Canción");
         addClassName("fondo");
@@ -107,6 +107,9 @@ public class MainView extends HorizontalLayout {
             throw new RuntimeException(e);
         }
 
+        //LOGICA DE LAS CANCIONES
+
+         audioPlayer=new AudioPlayer();
         //play.setIcon(new Icon(VaadinIcon.STOP));
         //PROGRAMACION DE LA DERECHA
         derecha.add(grid);
@@ -122,6 +125,15 @@ public class MainView extends HorizontalLayout {
 
 
         add(izquierda,derecha);
+    }
+    public static void insertCanciones(){
+        audioPlayer=new AudioPlayer();
+        String filePath="C:\\Users\\milla\\OneDrive - Unidad de Educación Media Superior Tecnológica Industrial y de Servicios\\DevilMan Projects\\Aprendizaje VAADIN\\reproductor\\src\\main\\java\\com\\example\\application\\views\\musica\\No Me Toquen Ese Vals, Julio Jaramillo.mp3";
+        audioPlayer.insertar("No me toquen ese vals - Julio Jaramillo",filePath);
+        String filePath2="C:\\Users\\milla\\OneDrive - Unidad de Educación Media Superior Tecnológica Industrial y de Servicios\\DevilMan Projects\\Aprendizaje VAADIN\\reproductor\\src\\main\\java\\com\\example\\application\\views\\musica\\Daddy Yankee- Pose Sub.Español.mp3";
+        audioPlayer.insertar("Pose - Daddy Yankee",filePath2);
+        String filePath3="C:\\Users\\milla\\OneDrive - Unidad de Educación Media Superior Tecnológica Industrial y de Servicios\\DevilMan Projects\\Aprendizaje VAADIN\\reproductor\\src\\main\\java\\com\\example\\application\\views\\musica\\Molotov - Frijolero.mp3.crdownload";
+        audioPlayer.insertar("Frijolero - Molotov",filePath3);
     }
 
 }
