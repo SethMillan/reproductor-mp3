@@ -36,10 +36,11 @@ public class MainView extends HorizontalLayout {
     private HorizontalLayout izquierda,iconos;
     private VerticalLayout derecha, vertical;
     //private Image img;
-    private H2 cancion;
+    private static H2 cancion;
     private H1 titulo;
     private static boolean estadoBtn=false;
     private static AudioPlayer audioPlayer;
+    private static nodo cancionActual;//=new File("C:\\Users\\milla\\OneDrive - Unidad de Educación Media Superior Tecnológica Industrial y de Servicios\\DevilMan Projects\\Aprendizaje VAADIN\\reproductor\\src\\main\\java\\com\\example\\application\\views\\musica\\Daddy-Yankee-Pose-Sub.Español.wav");
     private static Clip clip;
 
 
@@ -63,14 +64,16 @@ public class MainView extends HorizontalLayout {
         iconos.setSizeFull();
         iconos.setJustifyContentMode(JustifyContentMode.CENTER);
         iconos.setAlignItems(Alignment.CENTER);
-        cancion=new H2("* Nombre de cancion *");
-
-
-        //GRID
         Grid<nodoDto> grid=new Grid<>(nodoDto.class);
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
         grid.setWidth("80%");
         grid.setMaxHeight("60%");
+        insertCanciones(grid);
+        cancion=new H2(cancionActual.getNombre());
+
+
+        //GRID
+
 
 
 
@@ -95,7 +98,6 @@ public class MainView extends HorizontalLayout {
         iconos.add(lastBtn, playBtn, nextBtn);
 
         //LOGICA DE LAS CANCIONES
-        insertCanciones(grid);
 
 
 
@@ -104,7 +106,7 @@ public class MainView extends HorizontalLayout {
             if(!estadoBtn){
                 estadoBtn=true;
                 playBtn.setIcon(stop);
-                reproducirCancion();
+                reproducirCancion(new File(cancionActual.getDireccion()));
             }else{
                 estadoBtn=false;
                 playBtn.setIcon(play);
@@ -112,7 +114,16 @@ public class MainView extends HorizontalLayout {
             }
 
         });
-
+        nextBtn.addClickListener(e->{
+            if(clip.isRunning()){
+                clip.stop();
+                cancionActual=cancionActual.getSiguiente();
+                reproducirCancion(new File(cancionActual.getDireccion()));
+            }else{
+                cancionActual=cancionActual.getSiguiente();
+            }
+            cancion.setText(cancionActual.getNombre());
+        });
 
         //PROGRAMACION DE LA DERECHA
         derecha.add(grid);
@@ -142,11 +153,12 @@ public class MainView extends HorizontalLayout {
         Notification.show(audioPlayer.getCancion(0).getSiguiente().getSiguiente().getNombre());
         Notification.show(audioPlayer.getCancion(0).getSiguiente().getSiguiente().getSiguiente().getNombre());
         audioPlayer.mostrarCanciones(grid);
+        cancionActual=audioPlayer.getCancion(0);
     }
-    public static void reproducirCancion(){
-        File archivo=new File(audioPlayer.getCancion(0).getDireccion());
+    public static void reproducirCancion(File file){
+        //File archivo=new File(audioPlayer.getCancion(0).getDireccion());
         try {
-            File file = new File("C:\\Users\\milla\\OneDrive - Unidad de Educación Media Superior Tecnológica Industrial y de Servicios\\DevilMan Projects\\Aprendizaje VAADIN\\reproductor\\src\\main\\java\\com\\example\\application\\views\\musica\\No-Me-Toquen-Ese-Vals_-Julio-Jaramillo.wav");  // Reemplaza con la ruta correcta
+            //File file = new File("C:\\Users\\milla\\OneDrive - Unidad de Educación Media Superior Tecnológica Industrial y de Servicios\\DevilMan Projects\\Aprendizaje VAADIN\\reproductor\\src\\main\\java\\com\\example\\application\\views\\musica\\No-Me-Toquen-Ese-Vals_-Julio-Jaramillo.wav");  // Reemplaza con la ruta correcta
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
             clip = AudioSystem.getClip();
             clip.open(audioInputStream);
