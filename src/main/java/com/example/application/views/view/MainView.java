@@ -124,7 +124,16 @@ public class MainView extends HorizontalLayout {
             }
             cancion.setText(cancionActual.getNombre());
         });
-
+        lastBtn.addClickListener(e->{
+            if(clip.isRunning()){
+                clip.stop();
+                cancionActual=cancionActual.getAnterior();
+                reproducirCancion(new File(cancionActual.getDireccion()));
+            }else{
+                cancionActual=cancionActual.getAnterior();
+            }
+            cancion.setText(cancionActual.getNombre());
+        });
         //PROGRAMACION DE LA DERECHA
         derecha.add(grid);
         derecha.setSizeFull();
