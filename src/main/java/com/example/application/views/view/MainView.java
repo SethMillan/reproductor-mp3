@@ -137,7 +137,7 @@ public class MainView extends HorizontalLayout {
             if(nodoActual.getNombre().equals(nombreCancion)){
                 Notification.show("La cancion ya se esta reproduciendo");
             }else{
-                if(clip.isRunning()){
+                if(clip!=null&&clip.isRunning()){
                     detenerCancion();
                 }
                 Notification.show("Cambiando de cancion...");
